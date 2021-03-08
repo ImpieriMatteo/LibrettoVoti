@@ -24,6 +24,12 @@ public class Libretto {
 	}
 	
 	*/
+	
+	/**
+	 * Ricerca una serie di Voti di cui è specificato il punteggio
+	 * @param punteggio
+	 * @return Lista contenente i voti
+	 */
 	public List<Voto> listaVotiUguali(int punteggio){
 		List<Voto> risultato = new ArrayList<>();
 		for(Voto v : voti) {
@@ -34,11 +40,33 @@ public class Libretto {
 		return risultato;
 	}
 	
+	/**
+	 * Ricerca una serie di Voti di cui è specificato il punteggio
+	 * @param punteggio
+	 * @return Libretto contenente un insieme di voti
+	 */
 	public Libretto votiUguali(int punteggio) {
 		Libretto risultato = new Libretto();
 		for(Voto v : voti) {
 			if(v.getVoto()==punteggio) {
 				risultato.add(v);
+			}
+		}
+		return risultato;
+	}
+	
+	/**
+	 * Ricerca un Voto del corso di cui è specificato il nome del corso
+	 * Se il corso non esiste, restituisce null.
+	 * @param nomeCorso
+	 * @return
+	 */
+	public Voto ricercaCorso(String nomeCorso) {
+		Voto risultato = null;
+		for(Voto v : voti) {
+			if(v.getNomeCorso().equals(nomeCorso)) {
+				risultato = v;
+				break;
 			}
 		}
 		return risultato;
