@@ -2,12 +2,14 @@ package it.polito.tdp.librettovoti;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.librettovoti.model.Libretto;
 import it.polito.tdp.librettovoti.model.Voto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -26,9 +28,9 @@ public class FXMLController {
 
     @FXML
     private TextField txtVoto;
-
+    
     @FXML
-    private TextField txtData;
+    private DatePicker pickerEsame;
 
     @FXML
     private TextArea txtResult;
@@ -43,10 +45,14 @@ public class FXMLController {
     	}
     	
     	String votoEsame = txtVoto.getText();
+    	if(votoEsame.length()==0) {
+    		txtResult.setText("ERRORE: voto esame vuoto");
+    		return;
+    	}
     	int votoInt;
     	try {
     		votoInt = Integer.parseInt(votoEsame);
-    	}catch(NumberFormatException e) {
+    	}catch(NumberFormatException ex) {
     		txtResult.setText("ERRORE: voto inserito non numerico");
     		return;
     	}
@@ -55,12 +61,24 @@ public class FXMLController {
     		return;
     	}
     	
+    	/**
     	String dataEsame = txtData.getText();
+    	if(dataEsame.length()==0) {
+    		txtResult.setText("ERRORE: data esame vuoto");
+    		return;
+    	}
     	LocalDate data;
     	try {
     		data = LocalDate.parse(dataEsame);
-    	}catch(Exception e) {
+    	}catch(DateTimeParseException ex) {
     		txtResult.setText("ERRORE: formato data inserita non corretta");
+    		return;
+    	}
+    	*/
+    	//Il date picker restituisce un formato local date
+    	LocalDate data = pickerEsame.getValue();
+    	if(data==null) {
+    		txtResult.setText("ERRORE: la data è obbligatoria");
     		return;
     	}
     	
@@ -68,8 +86,11 @@ public class FXMLController {
     	Voto voto = new Voto(nomeEsame, votoInt, data);
     	model.add(voto);
     	
-    	//Aggiorna i risultati
+    	//Aggiorna i risultati (nella view)
     	txtResult.setText(model.toString());
+    	txtEsame.clear();
+    	txtVoto.clear();
+    	pickerEsame.setValue(null);
     }
     
     public void setModel(Libretto model) {
@@ -80,7 +101,7 @@ public class FXMLController {
     void initialize() {
         assert txtEsame != null : "fx:id=\"txtEsame\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtVoto != null : "fx:id=\"txtVoto\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert txtData != null : "fx:id=\"txtData\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert pickerEsame != null : "fx:id=\"pickerEsame\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
 
     }
